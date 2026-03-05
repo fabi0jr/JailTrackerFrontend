@@ -1,6 +1,13 @@
 import { Lock } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 export default function LoginModel() {
+  const navigate = useNavigate();
+  function submitForm(event: React.FormEvent){
+    event.preventDefault();
+    //Logica de autenticação 
+    navigate("/dashboard")
+  }
   return (
     <div className="flex items-center justify-center min-h-screen">
       {/* Card Principal */}
@@ -20,7 +27,7 @@ export default function LoginModel() {
         </p>
 
         {/* Formulário */}
-        <form className="w-full space-y-5">
+        <form className="w-full space-y-5" onSubmit={submitForm}>
           <div>
             <label className="block text-sm font-bold text-gray-700 mb-2">
               Email

@@ -1,5 +1,7 @@
 //import { useEffect, useState } from 'react';
-import LoginModel from './components/LoginModel';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import LoginPage from './pages/LoginPage';
+import DashBoardPage from './pages/DashBoardPage';
 
 function App() {
   //const [mensagem, setMensagem] = useState('Conectando ao backend...')
@@ -19,11 +21,12 @@ function App() {
   // }, [])
 
   return (
-    <div className="flex items-center justify-center min-h-screen min-w-screen bg-white">
-      <div className="min-h-screen w-2/3" id='DivModel'>
-        <LoginModel/>
-      </div>
-    </div>
+    <Router>
+      <Routes>
+        <Route path='/' element={<LoginPage/>}></Route>
+        <Route path='/dashboard' element={<DashBoardPage/>}></Route>
+      </Routes>
+    </Router>
   )
 }
 
