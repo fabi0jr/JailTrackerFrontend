@@ -7,7 +7,6 @@ export default function LoginModel() {
   const [email, setEmail] = React.useState("");
   const [senha, setSenha] = React.useState("");
   const [error, setError] = React.useState("");
-  console.log(import.meta.env.VITE_BACKEND_API);
   const BACKEND_API = import.meta.env.VITE_BACKEND_API// || "http://localhost:3000";
   const navigate = useNavigate();
   
