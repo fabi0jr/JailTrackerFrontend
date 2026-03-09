@@ -1,50 +1,106 @@
+import React from 'react';
 import { Lock } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie';
 
 export default function LoginModel() {
+  const [email, setEmail] = React.useState("");
+  const [senha, setSenha] = React.useState("");
+  const [error, setError] = React.useState("");
+  const BACKEND_API = import.meta.env.VITE_BACKEND_API// || "http://localhost:3000";
   const navigate = useNavigate();
-  function submitForm(event: React.FormEvent){
+  
+  // Função que será executada ao clicar no botão ou dar Enter
+  const submitForm = async (event: React.FormEvent) => {
     event.preventDefault();
-    //Logica de autenticação 
-    navigate("/dashboard")
-  }
+    setError(""); // Limpa erros anteriores
+
+    // Valida antes de enviar
+    if (!email || !senha) {
+      setError("Email e senha são obrigatórios");
+      return;
+    }
+
+    try {
+      const payload = { email, senha };
+
+      // 1. Chamada para a API (Ajustado para o endpoint correto)
+      const response = await fetch(`${BACKEND_API}/auth/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        // Exibe a mensagem de erro que vem do Backend (ex: "Senha incorreta")
+        const errorMsg = data.message || data.error || "Erro ao fazer login";
+        setError(errorMsg);
+        console.error("Erro:", errorMsg);
+        return;
+      }
+
+      // 2. Armazenamento nos Cookies
+      // O 'access_token' dura pouco. O 'refresh_token' dura mais (7 dias).
+      Cookies.set('access_token', data.access_token, { expires: 1, secure: false }); 
+      
+      if (data.refresh_token) {
+        Cookies.set('refresh_token', data.refresh_token, { expires: 7, secure: false });
+      }
+
+      // 3. Sucesso! Redireciona para o Dashboard
+      navigate('/dashboard');
+      
+    } catch (err: any) {
+      setError("Não foi possível conectar ao servidor.");
+    }
+  };
+
   return (
-    <div className="flex items-center justify-center min-h-screen">
-      {/* Card Principal */}
+    <div className="flex items-center justify-center min-h-screen bg-gray-50">
       <div className="w-full max-w-lg bg-white rounded-2xl shadow-sm border border-gray-200 p-8 flex flex-col items-center">
         
-        {/* Ícone de Cadeado */}
         <div className="bg-gray-100 p-4 rounded-xl mb-6">
           <Lock className="w-8 h-8 text-slate-500" />
         </div>
 
-        {/* Títulos */}
         <h1 className="text-2xl font-bold text-gray-800 text-center mb-2">
           Sistema de Gerenciamento Prisional
         </h1>
-        <p className="text-gray-500 text-sm mb-8 text-center font-medium">
+        <p className="text-gray-500 text-sm mb-6 text-center font-medium">
           Acesso restrito a inspetores autorizados
         </p>
 
-        {/* Formulário */}
+        {/* Mensagem de Erro Visual */}
+        {error && (
+          <div className="w-full p-3 mb-4 text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg">
+            {error}
+          </div>
+        )}
+
         <form className="w-full space-y-5" onSubmit={submitForm}>
           <div>
-            <label className="block text-sm font-bold text-gray-700 mb-2">
-              Email
-            </label>
+            <label className="block text-sm font-bold text-gray-700 mb-2">Email</label>
             <input 
               type="email" 
+              required
+              value={email} // Conecta ao estado
+              onChange={(e) => setEmail(e.target.value)} // Atualiza o estado
               placeholder="inspetor@sistema.gov"
               className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all text-gray-600"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-bold text-gray-700 mb-2">
-              Senha
-            </label>
+            <label className="block text-sm font-bold text-gray-700 mb-2">Senha</label>
             <input 
               type="password" 
+              required
+              value={senha} // Conecta ao estado
+              onChange={(e) => setSenha(e.target.value)} // Atualiza o estado
               placeholder="••••••••"
               className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all text-gray-600"
             />
@@ -58,7 +114,6 @@ export default function LoginModel() {
           </button>
         </form>
 
-        {/* Footer */}
         <footer className="mt-10 text-gray-400 text-xs text-center font-medium">
           Versão 1.0 - Protótipo de Média Fidelidade
         </footer>
