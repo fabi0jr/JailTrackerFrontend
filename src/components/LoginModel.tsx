@@ -7,15 +7,13 @@ export default function LoginModel() {
   const [email, setEmail] = React.useState("");
   const [senha, setSenha] = React.useState("");
   const [error, setError] = React.useState("");
-  const BACKEND_API = import.meta.env.VITE_BACKEND_API// || "http://localhost:3000";
+  const BACKEND_API = import.meta.env.VITE_BACKEND_API
   const navigate = useNavigate();
   
-  // Função que será executada ao clicar no botão ou dar Enter
+
   const submitForm = async (event: React.FormEvent) => {
     event.preventDefault();
-    setError(""); // Limpa erros anteriores
-
-    // Valida antes de enviar
+    setError(""); 
     if (!email || !senha) {
       setError("Email e senha são obrigatórios");
       return;
@@ -24,7 +22,6 @@ export default function LoginModel() {
     try {
       const payload = { email, senha };
 
-      // 1. Chamada para a API (Ajustado para o endpoint correto)
       const response = await fetch(`${BACKEND_API}/auth/login`, {
         method: 'POST',
         headers: {
@@ -36,22 +33,17 @@ export default function LoginModel() {
       const data = await response.json();
 
       if (!response.ok) {
-        // Exibe a mensagem de erro que vem do Backend (ex: "Senha incorreta")
         const errorMsg = data.message || data.error || "Erro ao fazer login";
         setError(errorMsg);
         console.error("Erro:", errorMsg);
         return;
       }
 
-      // 2. Armazenamento nos Cookies
-      // O 'access_token' dura pouco. O 'refresh_token' dura mais (7 dias).
       Cookies.set('access_token', data.access_token, { expires: 1, secure: false }); 
       
       if (data.refresh_token) {
         Cookies.set('refresh_token', data.refresh_token, { expires: 7, secure: false });
       }
-
-      // 3. Sucesso! Redireciona para o Dashboard
       navigate('/dashboard');
       
     } catch (err: any) {
