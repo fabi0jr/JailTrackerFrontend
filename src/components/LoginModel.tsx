@@ -66,7 +66,6 @@ export default function LoginModel() {
           Acesso restrito a inspetores autorizados
         </p>
 
-        {/* Mensagem de Erro Visual */}
         {error && (
           <div className="w-full p-3 mb-4 text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg">
             {error}
@@ -100,7 +99,7 @@ export default function LoginModel() {
 
           <button 
             type="submit"
-            className="w-full bg-[#0f172a] text-white font-bold py-3 rounded-lg hover:bg-slate-800 transition-colors mt-2"
+            className="w-full bg-[#0f172a] text-white font-bold py-3 rounded-lg hover:bg-slate-800 transition-colors mt-2 cursor-pointer"
           >
             Entrar no Sistema
           </button>
