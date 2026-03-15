@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { LogOut, Users, FileText, UserPlus, Home, Calendar } from 'lucide-react';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
@@ -107,12 +107,12 @@ export default function Dashboard() {
                     }
                 });
 
-            } catch (error: Error | any) {
-                console.error("Erro crítico na integração:", error);
+            } catch (error: unknown) {
+                console.error("Erro crítico na integração:", error instanceof Error ? error.message : error);
             }
         };
         fetchData();
-    }, [BACKEND_API]);
+    }, [BACKEND_API, navigate]);
 
     const logout = () => {
         Cookies.remove('access_token', { path: '/' });
@@ -156,7 +156,7 @@ export default function Dashboard() {
     );
 }
 
-function NavItem({ icon, label, active = false }: { icon: any, label: string, active?: boolean }) {
+function NavItem({ icon, label, active = false }: { icon: React.ReactNode, label: string, active?: boolean }) {
     return (
         <button className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold transition-all ${active ? 'bg-black text-white' : 'text-gray-500 hover:bg-gray-100'}`}>
             {icon}
