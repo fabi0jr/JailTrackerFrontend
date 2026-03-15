@@ -46,8 +46,8 @@ export default function LoginModel() {
       }
       navigate('/dashboard');
       
-    } catch (err: any) {
-      setError("Não foi possível conectar ao servidor.");
+    } catch (err: Error | any) {
+      setError("Não foi possível conectar ao servidor." + (err.message ? ` Detalhes: ${err.message}` : ""));
     }
   };
 

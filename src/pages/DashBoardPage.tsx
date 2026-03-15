@@ -42,7 +42,7 @@ export default function Dashboard() {
 
     useEffect(() => {
         const fetchWithRefresh = async (endpoint: string) => {
-            let token = Cookies.get('access_token');
+            const token = Cookies.get('access_token');
 
             let response = await fetch(`${BACKEND_API}${endpoint}`, {
                 headers: { 'Authorization': `Bearer ${token}` }
@@ -107,7 +107,7 @@ export default function Dashboard() {
                     }
                 });
 
-            } catch (error) {
+            } catch (error: Error | any) {
                 console.error("Erro crítico na integração:", error);
             }
         };
