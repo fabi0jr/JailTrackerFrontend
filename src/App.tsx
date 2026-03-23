@@ -2,6 +2,7 @@
 import { BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 import LoginPage from './pages/LoginPage';
 import DashBoardPage from './pages/DashBoardPage';
+import RegisterPrisoner from './pages/RegisterPrisoner';
 
 function App() {
   //const [mensagem, setMensagem] = useState('Conectando ao backend...')
@@ -23,8 +24,9 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path='/' element={<LoginPage/>}></Route>
-        <Route path='/dashboard' element={<DashBoardPage/>}></Route>
+        <Route path='/' element={<LoginPage/>}/>
+        <Route path='/dashboard' element={<DashBoardPage/>}/>
+        <Route path='/registerPrisoners' element={<RegisterPrisoner/>}/>
       </Routes>
     </Router>
   )
