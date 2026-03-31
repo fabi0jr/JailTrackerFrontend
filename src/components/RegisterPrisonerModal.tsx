@@ -84,8 +84,18 @@ export default function RegisterPrisonerModal({ onClose }: RegisterPrisonerModal
                                 </select>
                             </div>
 
-                            <FormInput label="Pavilhão" name="pavilhao" placeholder="Ex: A, B, Solitária" />
-                            <FormInput label="Cela" name="cela" placeholder="Ex: 01, Triagem" />
+                            <div className="flex flex-col gap-2">
+                                <label className="text-sm font-bold text-gray-700">Pavilhão *</label>
+                                <select onChange={(e) => setPavilion(e.target.value)} name="reincidencia" className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-sm" required>
+                                    <option selected disabled>Selecione...</option>
+                                    <option value="Pavilhão A">Pavilhão A</option>
+                                    <option value="Pavilhão B">Pavilhão B</option>
+                                    <option value="Pavilhão C">Pavilhão C</option>
+                                </select>
+                            </div>
+
+                            
+                            <FormInput label="Cela" name="cela" placeholder="Ex: 01,02.." type='number'/>
 
                         </div>
                     </div>

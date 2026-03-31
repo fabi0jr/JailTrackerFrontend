@@ -5,17 +5,26 @@ import Cookies from 'js-cookie';
 import { useNavigate } from "react-router-dom";
 import LoadingModel from "../components/LoadingModel";
 import RegisterPrisonerModal from "../components/RegisterPrisonerModal";
+import PrisonerDetailsModal from "../components/PrisonerDetailsModal";
 
 //TIPAGEM DOS DADOS MOCKADOS:
 interface Prisoner {
+    id: number;
     nome: string;
+    estadoCivil: string;
+    nomePai: string;
+    nomeMae: string;
     cpf: string;
     delito: string;
+    reicidencia: boolean;
+    dataNasc: string;
     pavilhao: string;
     cela: string;
-    foto: string;
-    naSolitaria: boolean
-    id: number
+    foto: string | null;
+    naSolitaria: boolean;
+    dataFimSolitaria: string | null;
+    createdAt: string;
+    updatedAt: string;
 }
 
 export default function RegisterPrisoner() {
@@ -24,10 +33,18 @@ export default function RegisterPrisoner() {
     const [prisoners, setPrisoners] = useState<Prisoner[]>([]);
     const [isLoadingPrisoners, setIsLoadingPrisoners] = useState(true);
     const [isOpenModal, setIsOpenModal] = useState(false);
+    const [isOpenModalDetailPrisoner, setIsOpenModalDetailPrisoner] = useState(false);
+    const [selectedPrisoner, setSelectedPrisoner] = useState<Prisoner | null>(null);
 
     function closeModal() {
         setIsOpenModal(false);
     }
+
+    function clodeModalDetailPrisoner() {
+        setIsOpenModalDetailPrisoner(false);
+    }
+
+    
 
 
     useEffect(() => {
@@ -141,48 +158,50 @@ export default function RegisterPrisoner() {
                         {
                             isLoadingPrisoners ? <LoadingModel /> : <div className="flex-1 overflow-y-auto pr-2 space-y-4 custom-scrollbar">
                                 {prisoners.map((p) => (
-                                    <div key={p.id} className="bg-gray-50 rounded-xl p-5 border border-gray-100 flex items-center justify-between transition-colors hover:border-gray-200 hover:bg-white group">
-                                        <div className="flex items-center gap-4">
-                                            <img
-                                                src={p.foto != null ? p.foto : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcShg8keaWuTWemET3-1mWqZae05N8W6SLGgGg&s"}
-                                                alt={p.nome}
-                                                className="w-14 h-14 rounded-full border-2 border-white ring-2 ring-gray-100 shadow-inner object-cover shrink-0"
-                                            />
+                                        <div key={p.id} className="bg-gray-50 rounded-xl p-5 border border-gray-100 flex items-center justify-between transition-colors hover:border-gray-200 hover:bg-white group">
+                                            <div className="flex items-center gap-4">
+                                                <img
+                                                    src={p.foto != null ? p.foto : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcShg8keaWuTWemET3-1mWqZae05N8W6SLGgGg&s"}
+                                                    alt={p.nome}
+                                                    className="w-14 h-14 rounded-full border-2 border-white ring-2 ring-gray-100 shadow-inner object-cover shrink-0"
+                                                />
 
-                                            <div>
-                                                <h3 className="font-bold text-base text-slate-800">{p.nome}</h3>
-                                                <p className="text-xs text-gray-400 font-medium">CPF: {p.cpf}</p>
-                                            </div>
-                                        </div>
-
-                                        <div className="flex items-center gap-10 text-right">
-                                            <div className="grid grid-cols-2 gap-x-8 gap-y-1 text-sm">
-                                                <p className="font-medium text-gray-600">Pavilhão: <span className="font-bold text-slate-900">{p.pavilhao}</span></p>
-                                                <p className="font-medium text-gray-600">Cela: <span className="font-bold text-slate-900">{p.cela}</span></p>
-                                                <p className="font-medium text-gray-600">Delito: <span className="font-bold text-red-600">{p.delito}</span></p>
-                                                <p className="font-medium text-gray-600">Situação: <span className="font-bold text-red-600">{p.naSolitaria ? "Solitária" : "Normal"}</span></p>
-                                            </div>
-
-                                            <button className="hover:bg-gray-200 cursor-pointer px-3 py-2 rounded-2xl">
-                                                <div className="flex gap-2">
-                                                    <Search className="text-black" size={18} />
-                                                    <div>Ver detalhes</div>
+                                                <div>
+                                                    <h3 className="font-bold text-base text-slate-800">{p.nome}</h3>
+                                                    <p className="text-xs text-gray-400 font-medium">CPF: {p.cpf}</p>
                                                 </div>
-                                            </button>
+                                            </div>
 
+                                            <div className="flex items-center gap-10 text-right">
+                                                <div className="grid grid-cols-2 gap-x-8 gap-y-1 text-sm">
+                                                    <p className="font-medium text-gray-600">Pavilhão: <span className="font-bold text-slate-900">{p.pavilhao}</span></p>
+                                                    <p className="font-medium text-gray-600">Cela: <span className="font-bold text-slate-900">{p.cela}</span></p>
+                                                    <p className="font-medium text-gray-600">Delito: <span className="font-bold text-red-600">{p.delito}</span></p>
+                                                    <p className="font-medium text-gray-600">Situação: <span className="font-bold text-red-600">{p.naSolitaria ? "Solitária" : "Normal"}</span></p>
+                                                </div>
 
-                                            <button className="text-gray-400 opacity-0 group-hover:opacity-100 group-hover:text-red-600 transition-all p-2 rounded-lg hover:bg-red-50">
-                                                <Trash2 size={18} />
-                                            </button>
+                                                <button className="hover:bg-gray-200 cursor-pointer px-3 py-2 rounded-2xl" onClick={() => {
+                                                    setSelectedPrisoner(p);
+                                                    setIsOpenModalDetailPrisoner(true);
+                                                }}>
+                                                    <div className="flex gap-2">
+                                                        <Search className="text-black" size={18} />
+                                                        <div>Ver detalhes</div>
+                                                    </div>
+                                                </button>
+                                                <button className="text-gray-400 opacity-0 group-hover:opacity-100 group-hover:text-red-600 transition-all p-2 rounded-lg hover:bg-red-50">
+                                                    <Trash2 size={18} />
+                                                </button>
+                                            </div>
                                         </div>
-                                    </div>
                                 ))}
                             </div>
                         }
                     </section>
                 </main>
             </div>
-            {isOpenModal && <RegisterPrisonerModal onClose={closeModal}/>}
+            {isOpenModalDetailPrisoner && selectedPrisoner != null && <PrisonerDetailsModal prisoner={selectedPrisoner} onClose={clodeModalDetailPrisoner} />}
+            {isOpenModal && <RegisterPrisonerModal onClose={closeModal} />}
         </>
     )
 }
