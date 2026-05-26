@@ -1,4 +1,4 @@
-import { Calendar, FileText, Home, LogOut, UserPlus, Users } from "lucide-react";
+import { FileText, Home, LogOut, UserCheck, UserPlus, Users } from "lucide-react";
 import logo from "../assets/logojail.png";
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
@@ -20,9 +20,9 @@ export default function Header({ page }: Props) {
                 <img src={logo} alt="Logo" className="h-10" />
                 <div className="flex gap-2">
                     <NavItem icon={<Home size={16} />} label="Início" active={page == "home"} destinationURL={"/dashboard"} />
-                    <NavItem icon={<Users size={16} />} label="Pavilhões" active={page == "pavilion"} />
-                    <NavItem icon={<Calendar size={16} />} label="Visitas" active={page == "visits"} />
-                    <NavItem icon={<FileText size={16} />} label="Relatórios" active={page == "registers"} />
+                    <NavItem icon={<Users size={16} />} label="Pavilhões" active={page == "pavilion"} destinationURL={"/pavilhoes"} />
+                    <NavItem icon={<UserCheck size={16} />} label="Visitantes" active={page == "visitors"} destinationURL={"/visitantes"} />
+                    <NavItem icon={<FileText size={16} />} label="Relatórios" active={page == "registers"} destinationURL={"/relatorios"} />
                     <NavItem icon={<UserPlus size={16} />} label="Cadastro de Presos" active={page == "registerPrisorners"} destinationURL={"/registerPrisoners"} />
                 </div>
             </div>

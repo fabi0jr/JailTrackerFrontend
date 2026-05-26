@@ -82,23 +82,21 @@ export default function Dashboard() {
 
         const fetchData = () => {
             try {
-                fetchWithRefresh('/visits').then((valueData) => {
+                fetchWithRefresh('/dashboard/visitsToday').then((valueData) => {
                     if (valueData) {
                         setVisits(valueData);
                         setIsLoadingVisits(false);
                     }
                 });
 
-
-                fetchWithRefresh("/prisoners/solitaria").then((valueData) => {
+                fetchWithRefresh("/dashboard/prisionersInSolitary").then((valueData) => {
                     if (valueData) {
                         setPrisonersInConfinament(valueData);
                         setIsLoadingPrisonerInConfinament(false);
                     }
                 });
 
-
-                fetchWithRefresh("/prisoners/ocupation-pavilhao").then((valueData) => {
+                fetchWithRefresh("/dashboard/occupationRate").then((valueData) => {
                     if (valueData) {
                         setPavilionCount(valueData);
                         setIsLoadingGraphicData(false);

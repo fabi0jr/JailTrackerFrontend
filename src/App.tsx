@@ -1,8 +1,12 @@
 //import { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Routes, Route} from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import LoginPage from './pages/LoginPage';
 import DashBoardPage from './pages/DashBoardPage';
 import RegisterPrisoner from './pages/RegisterPrisoner';
+import RelatoriosPage from './pages/RelatoriosPage';
+import VisitantesPage from './pages/VisitantesPage';
+import VisitasPage from './pages/VisitasPage';
+import PavilhoesPage from './pages/PavilhoesPage';
 
 function App() {
   //const [mensagem, setMensagem] = useState('Conectando ao backend...')
@@ -27,6 +31,10 @@ function App() {
         <Route path='/' element={<LoginPage/>}/>
         <Route path='/dashboard' element={<DashBoardPage/>}/>
         <Route path='/registerPrisoners' element={<RegisterPrisoner/>}/>
+        <Route path='/relatorios' element={<RelatoriosPage/>}/>
+        <Route path='/visitantes' element={<VisitantesPage/>}/>
+        <Route path='/visitas' element={<Navigate to="/visitantes" replace />}/>
+        <Route path='/pavilhoes' element={<PavilhoesPage/>}/>
       </Routes>
     </Router>
   )
