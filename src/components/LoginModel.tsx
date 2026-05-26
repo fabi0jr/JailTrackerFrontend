@@ -106,7 +106,7 @@ export default function LoginModel() {
         </form>
 
         <footer className="mt-10 text-gray-400 text-xs text-center font-medium">
-          Versão 1.0 - Protótipo de Média Fidelidade
+          Versão 1.0
         </footer>
       </div>
     </div>
